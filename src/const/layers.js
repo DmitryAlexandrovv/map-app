@@ -1,6 +1,6 @@
 export const LAYERS_TYPES = {
-    PINBALL: 0,
-    SENSORS: 1,
+    PINBALL: 'pinball',
+    SENSORS: 'sensors',
 };
 
 export const LAYERS = [

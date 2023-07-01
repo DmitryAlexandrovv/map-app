@@ -7,7 +7,7 @@
                 class="layers-switcher__item"
             >
                 <font-awesome-icon
-                    v-if="layer.type === activeLayerType"
+                    v-if="loadedLayerTypes.includes(layer.type)"
                     class="layers-switcher__icon"
                     :icon="['fa', 'square-check']"
                 />
@@ -24,21 +24,35 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex';
 import { LAYERS } from '../const/layers';
+
+const { mapActions, mapState } = createNamespacedHelpers('layers');
 
 export default {
     name: 'LayersSwitcher',
     data() {
         return {
             LAYERS,
-            activeLayerType: null,
         };
     },
+    computed: {
+        ...mapState([
+            'loadedLayerTypes',
+        ]),
+    },
     methods: {
+        ...mapActions([
+            'loadLayer',
+        ]),
         onChangeLayer(type) {
-            this.activeLayerType = type;
+            this.$emit('request-started');
 
-            // ToDo dispatch action and send request
+            this.loadLayer(type).catch((e) => {
+                window.alert(e.message);
+            }).finally(() => {
+                this.$emit('request-completed');
+            });
         },
     },
 };

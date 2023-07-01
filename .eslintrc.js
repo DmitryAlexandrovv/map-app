@@ -48,6 +48,9 @@ module.exports = {
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'indent': ['error', 4],
         'import/no-extraneous-dependencies': 'off',
-        'import/prefer-default-export': 'off'
+        'import/prefer-default-export': 'off',
+        'no-alert': 'off',
+        'array-callback-return': 'off',
+        'no-alert': 'off'
     }
 }
