@@ -1,6 +1,7 @@
 import 'normalize.css';
 import Vue from 'vue';
 import App from './App';
+import './config/font-awesome';
 
 Vue.config.productionTip = false;
 
