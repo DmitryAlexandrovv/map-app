@@ -7,14 +7,14 @@ import { createNamespacedHelpers } from 'vuex';
 import { LAYERS_TYPES } from '../const/layers';
 import { MAP_STYLES_URL } from '../const/map';
 
-const { mapState } = createNamespacedHelpers('layers');
+const { mapState: mapLayersState } = createNamespacedHelpers('layers');
+const { mapActions: mapMapLibreActions, mapState: mapMapLibreState } = createNamespacedHelpers('map');
 
 
 export default {
     name: 'Map',
     data() {
         return {
-            map: null,
             markers: {
                 [LAYERS_TYPES.PINBALL]: [],
                 [LAYERS_TYPES.SENSORS]: [],
@@ -22,10 +22,13 @@ export default {
         };
     },
     computed: {
-        ...mapState([
+        ...mapLayersState([
             'pinballLocations',
             'sensorsBoxes',
             'loadedLayerTypes',
+        ]),
+        ...mapMapLibreState([
+            'map',
         ]),
     },
     watch: {
@@ -37,12 +40,12 @@ export default {
         },
     },
     mounted() {
-        this.map = new window.maplibregl.Map({
+        this.setMap(new window.maplibregl.Map({
             container: 'map',
             style: MAP_STYLES_URL,
             center: [0, 0],
             zoom: 1,
-        });
+        }));
 
         window.addEventListener('click', this.mapMarkerClickHandler);
     },
@@ -50,6 +53,9 @@ export default {
         window.removeEventListener('click', this.mapMarkerClickHandler);
     },
     methods: {
+        ...mapMapLibreActions([
+            'setMap',
+        ]),
         handleSelectLayer(value, type) {
             if (value.length === 0) {
                 this.removeMarkers(this.markers[type]);

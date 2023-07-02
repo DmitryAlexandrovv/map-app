@@ -6,6 +6,7 @@
             @request-started="isRequestInProgress = true"
             @request-completed="isRequestInProgress = false"
         />
+        <CitiesSwitcher />
     </div>
 </template>
 
@@ -13,6 +14,7 @@
 import Map from './components/Map';
 import LayersSwitcher from './components/LayersSwitcher';
 import Loader from './components/Loader';
+import CitiesSwitcher from './components/CitiesSwitcher';
 
 export default {
     name: 'App',
@@ -20,10 +22,12 @@ export default {
         Map,
         LayersSwitcher,
         Loader,
+        CitiesSwitcher,
     },
     data() {
         return {
             isRequestInProgress: false,
+            selectedCoordinates: [],
         };
     },
 };
@@ -34,9 +38,18 @@ export default {
         position: relative;
     }
 
-    .layers-switcher {
+    .layers-switcher,
+    .cities-switcher {
         position: fixed;
+    }
+
+    .layers-switcher {
         top: 20px;
+        left: 20px;
+    }
+
+    .cities-switcher {
+        bottom: 20px;
         left: 20px;
     }
 </style>
