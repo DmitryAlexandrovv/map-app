@@ -31,6 +31,15 @@ const mutations = {
             state.loadedLayerTypes.push(type);
         }
     },
+    closeLayer(state, type) {
+        state.loadedLayerTypes = state.loadedLayerTypes.filter(value => value !== type);
+
+        if (type === LAYERS_TYPES.PINBALL) {
+            state.pinballLocations = [];
+        } else {
+            state.sensorsBoxes = [];
+        }
+    },
 };
 
 const actions = {
@@ -60,6 +69,9 @@ const actions = {
         }
 
         return dispatch('uploadSensorsBoxes', type);
+    },
+    closeLayer({ commit }, type) {
+        commit('closeLayer', type);
     },
 };
 

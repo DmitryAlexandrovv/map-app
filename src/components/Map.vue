@@ -4,6 +4,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
+import { LAYERS_TYPES } from '../const/layers';
 import { MAP_STYLES_URL } from '../const/map';
 
 const { mapState } = createNamespacedHelpers('layers');
@@ -14,20 +15,25 @@ export default {
     data() {
         return {
             map: null,
+            markers: {
+                [LAYERS_TYPES.PINBALL]: [],
+                [LAYERS_TYPES.SENSORS]: [],
+            },
         };
     },
     computed: {
         ...mapState([
             'pinballLocations',
             'sensorsBoxes',
+            'loadedLayerTypes',
         ]),
     },
     watch: {
         pinballLocations(value) {
-            this.handleSelectLayer(value);
+            this.handleSelectLayer(value, LAYERS_TYPES.PINBALL);
         },
         sensorsBoxes(value) {
-            this.handleSelectLayer(value);
+            this.handleSelectLayer(value, LAYERS_TYPES.SENSORS);
         },
     },
     mounted() {
@@ -44,16 +50,24 @@ export default {
         window.removeEventListener('click', this.mapMarkerClickHandler);
     },
     methods: {
-        handleSelectLayer(value) {
+        handleSelectLayer(value, type) {
+            if (value.length === 0) {
+                this.removeMarkers(this.markers[type]);
+            }
+
+            const markers = [];
+
             value.map((marker) => {
                 const el = document.createElement('div');
                 el.classList.add('map__marker', `map__marker--${marker.type}`);
                 el.dataset.message = marker.properties.message;
 
-                new window.maplibregl.Marker(el)
+                markers.push(new window.maplibregl.Marker(el)
                     .setLngLat(marker.geometry.coordinates)
-                    .addTo(this.map);
+                    .addTo(this.map));
             });
+
+            this.markers[type] = markers;
         },
         mapMarkerClickHandler(event) {
             const target = event.target;
@@ -61,6 +75,11 @@ export default {
             if (target.classList.contains('map__marker')) {
                 window.alert(target.dataset.message);
             }
+        },
+        removeMarkers(markers) {
+            markers.forEach((marker) => {
+                marker.remove();
+            });
         },
     },
 };

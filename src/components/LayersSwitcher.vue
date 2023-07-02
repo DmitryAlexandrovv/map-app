@@ -14,7 +14,7 @@
                 <a
                     class="layers-switcher__link"
                     href="#"
-                    @click.prevent="onChangeLayer(layer.type)"
+                    @click.prevent="onSelectLayer(layer.type)"
                 >
                     {{ layer.text }}
                 </a>
@@ -44,15 +44,20 @@ export default {
     methods: {
         ...mapActions([
             'loadLayer',
+            'closeLayer',
         ]),
-        onChangeLayer(type) {
-            this.$emit('request-started');
+        onSelectLayer(type) {
+            if (this.loadedLayerTypes.includes(type)) {
+                this.closeLayer(type);
+            } else {
+                this.$emit('request-started');
 
-            this.loadLayer(type).catch((e) => {
-                window.alert(e.message);
-            }).finally(() => {
-                this.$emit('request-completed');
-            });
+                this.loadLayer(type).catch((e) => {
+                    window.alert(e.message ? e.message : 'Ошибка');
+                }).finally(() => {
+                    this.$emit('request-completed');
+                });
+            }
         },
     },
 };
