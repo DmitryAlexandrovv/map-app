@@ -47,6 +47,9 @@ export default {
             zoom: 1,
         }));
 
+        this.handleSelectLayer(this.pinballLocations, LAYERS_TYPES.PINBALL);
+        this.handleSelectLayer(this.sensorsBoxes, LAYERS_TYPES.SENSORS);
+
         window.addEventListener('click', this.mapMarkerClickHandler);
     },
     beforeDestroy() {
