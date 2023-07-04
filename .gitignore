@@ -14,5 +14,3 @@ yarn.lock
 *.ntvs*
 *.njsproj
 *.sln
-
-/build
